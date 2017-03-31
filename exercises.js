@@ -6,27 +6,61 @@ function multiplyArguments() {
 	//use the arguments keyword to multiply all of the arguments together and return the product
 	//if no arguments are passed in return 0
 	//if one argument is passed in just return it
+
+	//look around minute 13 in video
+	var productTotal = 0;
+	if (arguments.length === 0) {
+        //console.log('zero');
+		return productTotal;
+	} else if (arguments.length === 1) {
+		productTotal = arguments[0];
+        //console.log('one item');
+		return productTotal;
+	} else {
+        productTotal = 1;
+		for (var i = 0; i < arguments.length; i++) {
+			productTotal = arguments[i] * productTotal;
+		}
+        //console.log('> 1 item');
+		return productTotal;
+	}
 }
 
 function invokeCallback(cb) {
 	//invoke cb
+	cb();
+	//around 50ish minutes in video
 }
 
 function sumArray(numbers, cb) {
 	//sum up all of the integers in the numbers array
 	//pass the result to cb
 	//no return is necessary
+	var arraySum = 0;
+	for (var i=0; i < numbers.length; i++) {
+		arraySum = arraySum + numbers[i];
+	}
+	cb(arraySum);
 }
 
 function forEach(arr, cb) {
 	//iterate over arr and pass its values to cb one by one
 	//hint: you will be invoking cb multiple times (once for each value in the array)
+	for (var i=0; i < arr.length; i++) {
+		cb(arr[i]);
+	}
 }
 
 function map(arr, cb) {
 	//create a new array
 	//iterate over each value in arr, pass it to cb, then place the value returned from cb into the new arr
 	//the new array should be the same length as the array argument
+	var newArray = [];
+	for (var i=0; i < arr.length; i++) {
+		var value = cb( arr[i] );
+		newArray.push(value);
+	}
+	return newArray;
 }
 
 function getUserConstructor() {
@@ -36,11 +70,25 @@ function getUserConstructor() {
 	//the constructor should have a method 'sayHi' on its prototype that returns the string 'Hello, my name is {{name}}'
 	//{{name}} should be the name set on each instance
 	//return the constructor
+	function user (options) {
+		this.username = options.username,
+		this.name = options.name,
+		this.email = options.email,
+		this.password = options.password,
+		//insert method here
+		this.sayHi = function() {
+			return 'Hello, my name is ' + this.name;
+		};
+	}
+	return user;
 }
 
 function addPrototypeMethod(Constructor) {
 	//add a method to the constructor's prototype
 	//the method should be called 'sayHi' and should return the string 'Hello World!'
+	Constructor.prototype.sayHi = function() {
+		return 'Hello World!';
+	};
 }
 
 function addReverseString() {
@@ -48,6 +96,35 @@ function addReverseString() {
 	//name this method reverse
 	//hint:
 	//you will need to use 'this' inside of reverse
+
+	//***Way 1***
+	/*
+	String.prototype.reverse = function(String) {
+		this.split('');
+		var revString = [];
+		for (var i=0; i < this.length; i++) {
+			revString[this.length-i] = this[i]; 
+		}
+		return revString.join('');
+	};
+	*/
+
+	/*
+	//***Way 2***
+	String.prototype.reverse = function(String) {
+		this.split('');
+		var revString = '';
+		for (var i = this.length-1; i >= 0; i--) {
+			revString += this[i]; 
+		}
+		return revString;
+	};
+	*/
+
+	//***Way 3***
+	String.prototype.reverse = function (String) {
+		return this.split('').reverse().join('');
+	};
 }
 
 function nFactorial(n) {
@@ -55,6 +132,11 @@ function nFactorial(n) {
 	//solve this recursively
 	//example:
 	//the factorial of 3 is 6 (3 * 2 * 1)
+	if (n===1) {
+		return 1;
+	} else {
+		return n * nFactorial(n-1);
+	}
 }
 
 function cacheFunction(cb) {
@@ -69,6 +151,19 @@ function cacheFunction(cb) {
 	//if the function you return is invoked with 5 it would pass 5 to cb(5) and return 25
 	//if the function you return is invoked again with 5 it will look on an object in the closure scope
 	//and return 25 directly and will not invoke cb again
+
+	//(around minute 49:00-61:00 of video) - not sure I understan all this, but it works (thanks for some help from others)  
+	var cbCache = {};
+	return function() {
+    var inArg = arguments[0];
+    if (cbCache.hasOwnProperty(inArg)) {
+      return cbCache[inArg];
+    } else {
+      cbCache[inArg] = cb(inArg);
+      return cbCache[inArg];
+    }
+  };	
+	
 }
 
 
